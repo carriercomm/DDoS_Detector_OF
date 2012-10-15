@@ -25,6 +25,7 @@ from som import *
 
 request = {'dpid':0}
 
+SOM_MAP_FILE = "map_size4.txt"
 FLOW_COLLECTION_PERIOD  = 3
 
 def get_median_in_array(array):
@@ -204,7 +205,8 @@ class ddosdetection(Component):
 
     def __init__(self, ctxt):
         Component.__init__(self, ctxt)
-        self.classifier_som = Som(40,40, 4, "/home/openflow/nox/build/src/nox/coreapps/examples/map_size4.txt", 0)
+	dir_path = os.path.dirname(os.path.abspath(__file__))
+        self.classifier_som = Som(40,40, 4, dir_path + "/" + SOM_MAP_FILE, 0)
 
     def get_flows(self, request, id):
         dpid = datapathid.from_host(long(request['dpid'], 16))
