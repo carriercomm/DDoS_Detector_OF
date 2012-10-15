@@ -1,0 +1,11 @@
+{
+    "components": [
+	{
+	    "name": "ddosdetector",
+	    "dependencies": [
+		"python_flow_fetcher"
+	    ],
+	    "python": "nox.coreapps.ddos_detector.ddosdetector"    
+	}
+    ]
+}
