@@ -53,7 +53,7 @@ def median_per_flow(flows):
       
       med_pkts.append(int(f['packet_count']))
       med_bytes.append(int(f['byte_count']))
-      med_duration.append(int(f['duration']))
+      med_duration.append(int(f['duration_sec']))
      
     return get_median_in_array(med_pkts), get_median_in_array(med_bytes), get_median_in_array(med_duration)   
 
@@ -169,7 +169,10 @@ def report_results(ff, dpid, classifier):
     if status == 0 and n_flows > 0:
 	num_cf = num_correlative_flows(x)
 	pcf = percentage_correlative_flows(num_cf, n_flows)
-	anpf = avg_per_flow(x)
+	#anpf = avg_per_flow(x)
+	
+	#print "\n flows: ", x
+	
 	mnpf = median_per_flow(x)
 	odgs = one_direction_gen_speed(num_cf, n_flows, FLOW_COLLECTION_PERIOD)
 	num_ports = distinct_ports(x)
@@ -193,23 +196,23 @@ def report_results(ff, dpid, classifier):
 #	"\n\t Velocidade de geracao de trafego em uma direcao: ", odgs,\
 #	"\n\t Numero de portas diferentes: ", num_ports
 	
-	flow_stat_array = [mnpf[0], mnpf[1], mnpf[2], pcf, odgs, num_ports, dpid]
-	write_pattern_log(flow_stat_array)
+	#flow_stat_array = [mnpf[0], mnpf[1], mnpf[2], pcf, odgs, num_ports, dpid]
+	#write_pattern_log(flow_stat_array)
 	
 
 class ddosdetection(Component):
 
     def __init__(self, ctxt):
         Component.__init__(self, ctxt)
-        self.classifier_som = Som(40,40, 4, "/home/mininet/noxcore/build/src/nox/coreapps/examples/map_size4.txt", 0)
+        self.classifier_som = Som(40,40, 4, "/home/openflow/nox/build/src/nox/coreapps/examples/map_size4.txt", 0)
 
     def get_flows(self, request, id):
         dpid = datapathid.from_host(long(request['dpid'], 16))
 	ff = self.ffa.fetch(dpid, request, lambda: report_results(ff, id, self.classifier_som))
 
     def flow_timer(self, dpid):
-
-	request['dpid'] = str(0x) + str(longlong_to_octstr(dpid)[6:].replace(':',''))
+	
+	request['dpid'] = str("0x") + str(longlong_to_octstr(dpid)[6:].replace(':',''))
 	addr_switch = str(longlong_to_octstr(dpid)[6:].replace(':',''))
 	#print "\nRequisicao das Flows do DataPath: ", longlong_to_octstr(dpid)[6:].replace(':','') 
 	self.get_flows(request, addr_switch)
