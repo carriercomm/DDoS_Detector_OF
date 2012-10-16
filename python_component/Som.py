@@ -1,4 +1,4 @@
-#  File som.py, 
+#  File Som.py, 
 #  brief: implementation of Self-Organized Maps
 #
 #  Copyright (C) 2010  Rodrigo de Souza Braga
@@ -21,9 +21,7 @@
 from random import *
 from math import *
 
-DATA_SIZE = 4
-input_data = []
-old_som = []
+from GetMapGroup import *
 
 def read_file_log(filename, array_input):
     
@@ -31,72 +29,6 @@ def read_file_log(filename, array_input):
     for line in log_file:
 	x = eval(line)
 	array_input.append(x)
-
-def test_som(filename, sample_size):
-  
-    log_file = open(str(filename),'r')
-    tad = 0
-
-    for line in log_file:
-	x = eval(line)
-	if (len(x) > sample_size):
-	    del x[6]
-
-	if sample_size == 4: 
-	    del x[4]
-	    del x[3]
-	    
-	aux = s.get_bmu(x, sample_size)
-	if verify_class(aux[0], aux[1]):
-	    tad = tad + 1
-    print tad
-
-def verify_class_size4(x, y):
-
-    x_min = 32
-    aux = 0
-
-    if (x >= 32 and x <= 33 and y <= 4):
-	aux = 1
-
-    if (x == 34 and y <= 5):
-	aux = 1
-
-    if (x >= 35 and x <= 37 and y <= 7):
-	aux = 1
-
-    if (x >= 38 and x <= 39 and y <= 8):
-	aux = 1
-
-    return aux
-    
-def verify_class_size6(x, y):
-
-    x_min = 32
-    aux = 0
-
-    if (x >= 31 and y <= 1):
-	aux = 1
-
-    if (x == 32 and y <= 3):
-	aux = 1
-
-    if (x == 33 and y <= 4):
-	aux = 1
-
-    if (x == 34 and y <= 5):
-	aux = 1
-
-    if (x == 35 and y <= 6):
-	aux = 1
-
-    if (x >= 36 and x <= 37 and y <= 7):
-	aux = 1
-
-    if (x >= 38 and x <= 39 and y <= 8):
-	aux = 1
-
-    return aux
 
 class Node:
     
@@ -215,7 +147,7 @@ class Som:
         iteration = 0
         start_learning_rate = 0.5
         learning_rate = 0.1
-	print "time_constant: ", str(time_constant), "grid_radius: ", str(grid_radius)
+	#print "time_constant: ", str(time_constant), "grid_radius: ", str(grid_radius)
 
         while (iteration < num_iterations):
         
@@ -246,16 +178,6 @@ class Som:
 	    return verify_class_size4(coord_bmu[0], coord_bmu[1])
 	else:
 	    return verify_class_size6(coord_bmu[0], coord_bmu[1])
- 
-    def print_array(self):
-    
-	output = open('/home/rodrigo/workspace/som_machine/src/trained_som.log', 'w')
-    
-        for i in range(self.height):
-            for j in range(self.width):
-               # print self.nodes[(i)*(self.width)+j].array
-		output.write(str(self.nodes[(i)*(self.width)+j].array)+"\n")
-	output.close()
 
     def print_matrix(self):
 
@@ -272,43 +194,3 @@ class Som:
             return a
         return b
 
-if __name__ == "__main__":
-    
-#    print "Inicializacao: "
-
-#    print "reading file:"
-
-#[3920, 259212, 111, 0.80000000000000004, 1.0, 4]
-#[2331, 154514, 114, 0.5714285714285714, 1.6666666666666667, 6]
-#[1, 60, 2, 0.7142857142857143, 3.0, 10]
-#[2, 120, 6, 0.80000000000000004, 2.0, 6]
-#[2, 120, 6, 0.80000000000000004, 2.0, 6]
-
-
-##### Treinar um SOM com amostras coletadas
-
-    #read_file_log("flow_stat.log", input_data)
-    #s=Som(40,40,DATA_SIZE, [])
-    #s.train(2, input_data, len(input_data))
-    #s.print_array_colors()
-
-##### Pegar um SOM FILE treinado jah
-
-    #read_file_log("trained_som.log", old_som)
-    s=Som(40,40,DATA_SIZE, "map_size4.txt", 0)
-
-##### Testando amostras 
-
-#    s.get_bmu([1, 60, 2, 0.7142857142857143, 3.0, 10], DATA_SIZE)
-#    s.get_bmu([2331, 154514, 114, 0.5714285714285714, 1.6666666666666667, 6], 6)
-#    s.get_bmu([2, 120, 6, 0.80000000000000004, 2.0, 6], 6)
-
-    s.classify_sample([1, 60, 2, 10], DATA_SIZE)
-    s.classify_sample([2331, 154514, 114, 6], DATA_SIZE)
-    s.classify_sample([2, 120, 6, 6], DATA_SIZE)
-    s.classify_sample([5, 220, 7, 11], DATA_SIZE)
-    
-#    test_som("flow_stat.log")
-#    test_som("final_attack_samples")
-#    test_som("sof3_n")
-#    s.print_matrix()

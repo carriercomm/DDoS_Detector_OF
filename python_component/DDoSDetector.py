@@ -1,4 +1,4 @@
-#  File ddosdetector.py, 
+#  File DDoSDetector.py, 
 #  brief: Nox component to get OF flows and seek 
 #         for ddos traffic patterns.
 #
@@ -23,6 +23,7 @@ from nox.lib.core import *
 from nox.lib.netinet.netinet import datapathid
 from nox.netapps.flow_fetcher.pyflow_fetcher import flow_fetcher_app
 from nox.lib.packet.packet_utils import longlong_to_octstr
+
 from Som import *
 from FeatureExtractor import *
 
