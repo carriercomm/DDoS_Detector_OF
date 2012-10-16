@@ -17,50 +17,48 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+ """If return 0, then is a sample of attack traffic, otherwise is a 
+    sample of normal traffic."""
+
 def verify_class_size4(x, y):
-
-    x_min = 32
-    aux = 0
-
+    
     if (x >= 32 and x <= 33 and y <= 4):
-        aux = 1
+        return 1
 
     if (x == 34 and y <= 5):
-        aux = 1
+        return 1
 
     if (x >= 35 and x <= 37 and y <= 7):
-        aux = 1
+        return 1
 
     if (x >= 38 and x <= 39 and y <= 8):
-        aux = 1
+        return 1
 
-    return aux
+    return 0
+
 
 def verify_class_size6(x, y):
 
-    x_min = 32
-    aux = 0
-
     if (x >= 31 and y <= 1):
-        aux = 1
+        return 1
 
     if (x == 32 and y <= 3):
-        aux = 1
+        return 1
 
     if (x == 33 and y <= 4):
-        aux = 1
+        return 1
 
     if (x == 34 and y <= 5):
-        aux = 1
+        return 1
 
     if (x == 35 and y <= 6):
-        aux = 1
+        return 1
 
     if (x >= 36 and x <= 37 and y <= 7):
-        aux = 1
+        return 1
 
     if (x >= 38 and x <= 39 and y <= 8):
-        aux = 1
+        return 1
 
-    return aux
+    return 0
 
