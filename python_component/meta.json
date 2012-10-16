@@ -5,7 +5,7 @@
 	    "dependencies": [
 		"python_flow_fetcher"
 	    ],
-	    "python": "nox.coreapps.ddos_detector.ddosdetector"    
+	    "python": "nox.coreapps.ddos_detector.DDoSDetector"    
 	}
     ]
 }
