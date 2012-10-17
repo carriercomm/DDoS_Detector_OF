@@ -17,7 +17,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
- """If return 0, then is a sample of attack traffic, otherwise is a 
+"""If return 0, then is a sample of attack traffic, otherwise is a 
     sample of normal traffic."""
 
 def verify_class_size4(x, y):
