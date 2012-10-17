@@ -21,6 +21,7 @@
 import os.path
 import json
 
+import logging
 from nox.lib.core import *
 from nox.lib.netinet.netinet import datapathid
 from nox.netapps.flow_fetcher.pyflow_fetcher import flow_fetcher_app
@@ -29,6 +30,8 @@ from nox.lib.packet.packet_utils import longlong_to_octstr
 from Som import *
 from FeatureExtractor import *
 from NetworkUtils import *
+
+logger = logging.getLogger("nox.coreapps.ddos_detector.DDoSDetector")
 
 request = {'dpid':0}
 
@@ -46,43 +49,29 @@ def report_results(ff, dpid, classifier):
     x = ff.get_flows()
     n_flows = len(x)
     
-    print "\nRequisicao das Flows do DataPath: ", str(dpid)
+    logger.debug("\nRequest Flows of DataPath: %s" % (str(dpid)))
 
     if status == 0 and n_flows > 0:
 	num_cf = num_correlative_flows(x)
 	pcf = percentage_correlative_flows(num_cf, n_flows)
-	#anpf = avg_per_flow(x)
-	
-	#print "\n flows: ", x
-	
 	mnpf = median_per_flow(x)
 	odgs = one_direction_gen_speed(num_cf, n_flows, FLOW_COLLECTION_PERIOD)
 	num_ports = distinct_ports(x)
 	sample_4 = list(mnpf)
 	sample_4.append(num_ports)
 
-
 	group = classifier.classify_sample(sample_4, 4)
 	if group:
-		print "A DDoS attack was detected"
+		logger.debug("A DDoS attack was detected")
 		flows_per_port(x)
 	else:
-		print "Network free from DDoS attack"
-	print "Features of traffic: " + str(sample_4)
+		logger.debug("Network free from DDoS attack")
+	logger.debug("Features of traffic: %s" % (str(sample_4)))
 	
 	data = [{ 'type':1, 'class':group, 'sample':sample_4}]
 	data_string = json.dumps(data)
 
 	sendTrafficData("Features of traffic: " + str(data_string))
-
-#	print "\n\t Numero de flows: ", n_flows,\
-#	"\n\t Numero de flows correlativas: ", num_cf,\
-#	"\n\t Media de pkts por flow: ", anpf[0]," - ", mnpf[0],\
-#	"\n\t Media de bytes por flow: ", anpf[1]," - ", mnpf[1],\
-#	"\n\t Media de duracao por flow: ", anpf[2]," - ", mnpf[2],\
-#	"\n\t Porcentagem de flows correlativas: ", pcf,\
-#	"\n\t Velocidade de geracao de trafego em uma direcao: ", odgs,\
-#	"\n\t Numero de portas diferentes: ", num_ports
 	
 	#flow_stat_array = [mnpf[0], mnpf[1], mnpf[2], pcf, odgs, num_ports, dpid]
 	#write_pattern_log(flow_stat_array)
