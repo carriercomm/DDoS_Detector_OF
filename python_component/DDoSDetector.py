@@ -19,6 +19,8 @@
 
 
 import os.path
+import json
+
 from nox.lib.core import *
 from nox.lib.netinet.netinet import datapathid
 from nox.netapps.flow_fetcher.pyflow_fetcher import flow_fetcher_app
@@ -26,12 +28,12 @@ from nox.lib.packet.packet_utils import longlong_to_octstr
 
 from Som import *
 from FeatureExtractor import *
+from NetworkUtils import *
 
 request = {'dpid':0}
 
 SOM_MAP_FILE = "map_size4.txt"
 FLOW_COLLECTION_PERIOD  = 3
-
 
 def write_pattern_log(flow_stat):
     
@@ -60,12 +62,18 @@ def report_results(ff, dpid, classifier):
 	sample_4.append(num_ports)
 
 
-	if classifier.classify_sample(sample_4, 4):
+	group = classifier.classify_sample(sample_4, 4)
+	if group:
 		print "A DDoS attack was detected"
 		flows_per_port(x)
 	else:
 		print "Network free from DDoS attack"
 	print "Features of traffic: " + str(sample_4)
+	
+	data = [{ 'type':1, 'class':group, 'sample':sample_4}]
+	data_string = json.dumps(data)
+
+	sendTrafficData("Features of traffic: " + str(data_string))
 
 #	print "\n\t Numero de flows: ", n_flows,\
 #	"\n\t Numero de flows correlativas: ", num_cf,\
