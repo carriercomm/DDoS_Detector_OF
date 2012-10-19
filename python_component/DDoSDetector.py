@@ -36,7 +36,7 @@ logger = logging.getLogger("nox.coreapps.ddos_detector.DDoSDetector")
 request = {'dpid':0}
 
 SOM_MAP_FILE = "map_size4.txt"
-FLOW_COLLECTION_PERIOD  = 3
+FLOW_COLLECTION_PERIOD  = 5
 
 def write_pattern_log(flow_stat):
     
@@ -71,7 +71,7 @@ def report_results(ff, dpid, classifier):
 	data = [{ 'type':1, 'class':group, 'sample':sample_4}]
 	data_string = json.dumps(data)
 
-	sendTrafficData("Features of traffic: " + str(data_string))
+	sendTrafficData(str(data_string))
 	
 	#flow_stat_array = [mnpf[0], mnpf[1], mnpf[2], pcf, odgs, num_ports, dpid]
 	#write_pattern_log(flow_stat_array)

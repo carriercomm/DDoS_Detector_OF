@@ -33,15 +33,18 @@ def sendTrafficData(data):
 	try:
 	    s.connect((DEST_IP, DEST_PORT))
 	except socket.gaierror, msg:
-	    print 'Error in address IP - ' + msg[0]
+	    print 'Error in address IP - ' + str(msg[0])
 	    s.close()
 	    return None
 	except socket.error, msg:
-	    print 'Conection failed - ' + msg[0]
+	    print 'Conection failed - ' + str(msg[0])
 	    s.close()
 	    return None
 
 	s.sendall(str(data))
 	#response = s.recv(1024)
 	s.close()
+
+
+
 
