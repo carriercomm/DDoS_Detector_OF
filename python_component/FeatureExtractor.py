@@ -19,7 +19,7 @@
 
 
 def get_median_in_array(array):
-    
+
     array.sort()
     array_lenght = len(array)
     mod = divmod(array_lenght, 2)
