@@ -68,7 +68,7 @@ def report_results(ff, dpid, classifier):
 		logger.debug("Network free from DDoS attack")
 	logger.debug("Features of traffic: %s" % (str(sample_4)))
 	
-	data = [{ 'type':1, 'class':group, 'sample':sample_4}]
+	data = { 'type':2, 'data':{'class':group, 'sample':sample_4}}
 	data_string = json.dumps(data)
 
 	sendTrafficData(str(data_string))
